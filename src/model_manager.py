@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Callable, Optional, Type
+from typing import Optional, Type
 
 MODEL_NAME = "small"
 MODEL_DIR = Path(os.environ.get("APPDATA", Path.home())) / "MurmurAI" / "models"
@@ -11,10 +11,7 @@ def is_ready() -> bool:
     return _MARKER.exists()
 
 
-def ensure_model(
-    progress_cb: Optional[Callable[[float], None]] = None,
-    _whisper_cls: Optional[Type] = None,
-) -> None:
+def ensure_model(_whisper_cls: Optional[Type] = None) -> None:
     """Download Whisper model if not present. _whisper_cls is injected in tests."""
     if is_ready():
         return
