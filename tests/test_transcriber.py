@@ -12,11 +12,10 @@ def _make_segment(text):
 def _loaded_transcriber(language="auto", mock_model=None):
     mock_model = mock_model or MagicMock()
     mock_model.transcribe.return_value = ([], MagicMock())
-    with patch("transcriber.WhisperModel", return_value=mock_model):
-        from transcriber import Transcriber
-        t = Transcriber(language=language, _model_cls=mock_model.__class__)
-        # bypass real load by directly assigning
-        t._model = mock_model
+    from transcriber import Transcriber
+    t = Transcriber(language=language, _model_cls=mock_model.__class__)
+    # bypass real load by directly assigning
+    t._model = mock_model
     return t, mock_model
 
 
