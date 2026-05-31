@@ -2,6 +2,7 @@ import sys
 import threading
 import winreg
 from pathlib import Path
+from typing import Optional
 
 import customtkinter as ctk
 
@@ -41,9 +42,9 @@ def _show_download_screen() -> None:
 
     ctk.CTkLabel(root, text="Downloading Whisper model (~500 MB)…",
                  wraplength=260).pack(pady=30)
-    bar = ctk.CTkProgressBar(root)
+    bar = ctk.CTkProgressBar(root, mode="indeterminate")
     bar.pack(fill="x", padx=30)
-    bar.set(0)
+    bar.start()
 
     def _download():
         ensure_model()
@@ -69,6 +70,7 @@ def main() -> None:
     # controller is referenced by the lambda before assignment — that is fine
     # because the lambda is only called after controller is created below.
     controller: Controller  # forward declaration for type checkers
+    tray: Optional[TrayIcon] = None
 
     def handle_settings_save(hotkey: str, language: str, start_on_login: bool) -> None:
         settings.hotkey        = hotkey
@@ -88,7 +90,8 @@ def main() -> None:
 
     def on_state_change(state: State) -> None:
         window.after(0, lambda s=state: window.update_state(s))
-        tray.set_state(state.value)
+        if tray is not None:
+            tray.set_state(state.value)
 
     controller = Controller(
         audio, transcriber, injector,
