@@ -41,7 +41,16 @@ except AttributeError:
 class TextInjector:
     def type_text(self, text: str) -> None:
         for ch in text:
-            self._send(ord(ch))
+            code = ord(ch)
+            if code > 0xFFFF:
+                # Supplementary plane: encode as surrogate pair
+                code -= 0x10000
+                high = 0xD800 + (code >> 10)
+                low  = 0xDC00 + (code & 0x3FF)
+                self._send(high)
+                self._send(low)
+            else:
+                self._send(code)
 
     def _send(self, code: int) -> None:
         if _sendinput is None:
@@ -50,8 +59,8 @@ class TextInjector:
         for i, flags in enumerate(
             [KEYEVENTF_UNICODE, KEYEVENTF_UNICODE | KEYEVENTF_KEYUP]
         ):
-            pair[i].type        = INPUT_KEYBOARD
-            pair[i]._u.ki.wVk   = 0
-            pair[i]._u.ki.wScan = code
+            pair[i].type          = INPUT_KEYBOARD
+            pair[i]._u.ki.wVk     = 0
+            pair[i]._u.ki.wScan   = code
             pair[i]._u.ki.dwFlags = flags
         _sendinput(2, pair, ctypes.sizeof(_INPUT))

@@ -21,3 +21,11 @@ def test_type_text_unicode_character():
         from injector import TextInjector
         TextInjector().type_text("ñ")
     assert mock_send.call_count == 1
+
+
+def test_type_text_emoji_sends_surrogate_pair():
+    with patch("injector._sendinput") as mock_send:
+        from injector import TextInjector
+        TextInjector().type_text("😀")   # U+1F600, outside BMP
+    # Should call SendInput twice: once for high surrogate, once for low
+    assert mock_send.call_count == 2
