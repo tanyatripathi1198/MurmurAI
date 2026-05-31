@@ -8,7 +8,27 @@ _MARKER = MODEL_DIR / ".model_ready"
 
 
 def is_ready() -> bool:
-    return _MARKER.exists()
+    if not _MARKER.exists():
+        return False
+    # Guard against stale markers (e.g. created by test mocks without real files)
+    return any(MODEL_DIR.rglob("*.bin"))
+
+
+def _patch_ssl() -> None:
+    """Bypass corporate proxy SSL cert issues for the HuggingFace download."""
+    try:
+        import httpx
+        import huggingface_hub
+        huggingface_hub.configure_http_backend(
+            lambda: httpx.Client(verify=False)
+        )
+    except Exception:
+        pass
+    import ssl
+    try:
+        ssl._create_default_https_context = ssl._create_unverified_context
+    except Exception:
+        pass
 
 
 def ensure_model(_whisper_cls: Optional[Type] = None) -> None:
@@ -17,6 +37,7 @@ def ensure_model(_whisper_cls: Optional[Type] = None) -> None:
         return
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
     if _whisper_cls is None:
+        _patch_ssl()
         from faster_whisper import WhisperModel
         _whisper_cls = WhisperModel
     _whisper_cls(
