@@ -21,7 +21,7 @@ def load() -> Settings:
         data = json.loads(SETTINGS_PATH.read_text(encoding="utf-8"))
         valid = {f for f in Settings.__dataclass_fields__}
         return Settings(**{k: v for k, v in data.items() if k in valid})
-    except Exception:
+    except (json.JSONDecodeError, OSError, TypeError):
         return Settings()
 
 
