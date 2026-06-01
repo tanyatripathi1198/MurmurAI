@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional, Type
 
 MODEL_NAME = "small"
-MODEL_DIR = Path(os.environ.get("APPDATA", Path.home())) / "MurmurAI" / "models"
+MODEL_DIR = Path(os.environ.get("APPDATA", Path.home())) / "Pooky" / "models"
 _MARKER = MODEL_DIR / ".model_ready"
 
 
@@ -16,17 +16,15 @@ def is_ready() -> bool:
 
 def _patch_ssl() -> None:
     """Bypass corporate proxy SSL cert issues for the HuggingFace download."""
-    try:
-        import httpx
-        import huggingface_hub
-        huggingface_hub.configure_http_backend(
-            lambda: httpx.Client(verify=False)
-        )
-    except Exception:
-        pass
     import ssl
     try:
         ssl._create_default_https_context = ssl._create_unverified_context
+    except Exception:
+        pass
+    try:
+        import httpx
+        from huggingface_hub.utils._http import set_client_factory
+        set_client_factory(lambda: httpx.Client(verify=False))
     except Exception:
         pass
 

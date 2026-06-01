@@ -39,7 +39,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name="MurmurAI",
+    name="Pooky",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

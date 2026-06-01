@@ -23,9 +23,9 @@ class TrayIcon:
         on_quit: Callable,
     ) -> None:
         self._icon = pystray.Icon(
-            "MurmurAI",
+            "Pooky",
             _make_icon_image(_COLORS["idle"]),
-            "MurmurAI",
+            "Pooky",
             menu=pystray.Menu(
                 pystray.MenuItem("Open", lambda icon, item: on_open(), default=True),
                 pystray.MenuItem("Quit", lambda icon, item: on_quit()),

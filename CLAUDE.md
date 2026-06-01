@@ -1,4 +1,4 @@
-# MurmurAI — Claude Code Guide
+# Pooky — Claude Code Guide
 
 ## Project overview
 
@@ -10,7 +10,7 @@ Windows voice-to-text dictation app. Press a hotkey → speak → text is pasted
 python src/main.py
 ```
 
-First launch: downloads Whisper small model (~500MB) to `%APPDATA%\MurmurAI\models\`. Subsequent launches skip the download.
+First launch: downloads Whisper small model (~500MB) to `%APPDATA%\Pooky\models\`. Subsequent launches skip the download.
 
 ## Running tests
 
@@ -33,7 +33,7 @@ src/
   hotkey.py        — pynput GlobalHotKeys for system-wide hotkey
   tray.py          — pystray system tray icon
   ui.py            — CustomTkinter card window + settings panel
-  settings.py      — JSON settings load/save (%APPDATA%\MurmurAI\settings.json)
+  settings.py      — JSON settings load/save (%APPDATA%\Pooky\settings.json)
   model_manager.py — model download guard (marker file + .bin check)
 tests/
   test_*.py        — unit tests per module, all hardware mocked
@@ -89,7 +89,7 @@ Uses `pyperclip.copy(" " + text)` then `pyautogui.hotkey("shift", "insert")`.
 
 ## Model storage
 
-Model files live at `%APPDATA%\MurmurAI\models\`. The `is_ready()` check looks for:
+Model files live at `%APPDATA%\Pooky\models\`. The `is_ready()` check looks for:
 1. A `.model_ready` marker file
 2. At least one `*.bin` file in the directory
 
@@ -101,7 +101,7 @@ If HuggingFace model download fails with SSL errors (common on corporate network
 
 ## Settings
 
-`%APPDATA%\MurmurAI\settings.json`:
+`%APPDATA%\Pooky\settings.json`:
 ```json
 {
   "hotkey": "ctrl+shift+space",

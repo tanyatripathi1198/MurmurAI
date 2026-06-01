@@ -1,4 +1,4 @@
-# MurmurAI
+# Pooky
 
 A Windows voice-to-text dictation app that transcribes speech locally using OpenAI's Whisper model and pastes the result into whatever window you are typing in — no internet or API key required.
 
@@ -27,8 +27,8 @@ A Windows voice-to-text dictation app that transcribes speech locally using Open
 ## Installation
 
 ```bash
-git clone https://github.com/tanyatripathi1198/MurmurAI
-cd MurmurAI
+git clone https://github.com/tanyatripathi1198/Pooky
+cd Pooky
 pip install -r requirements.txt
 ```
 
@@ -82,7 +82,7 @@ VAD fires after ~1 second of silence, sending the phrase to Whisper. Transcripti
 ```bash
 pip install pyinstaller
 pyinstaller murmurai.spec
-# Output: dist/MurmurAI.exe
+# Output: dist/Pooky.exe
 ```
 
 ---
@@ -116,7 +116,7 @@ python -m pytest tests/ -v
 
 ## Settings file
 
-Stored at `%APPDATA%\MurmurAI\settings.json`:
+Stored at `%APPDATA%\Pooky\settings.json`:
 
 ```json
 {

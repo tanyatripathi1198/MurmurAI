@@ -17,6 +17,19 @@ from tray import TrayIcon
 from ui import MurmurWindow
 
 
+def _migrate_appdata() -> None:
+    """Move %APPDATA%\\MurmurAI -> %APPDATA%\\Pooky on first launch after rename."""
+    import shutil
+    base = Path(os.environ.get("APPDATA", Path.home()))
+    old_dir = base / "MurmurAI"
+    new_dir = base / "Pooky"
+    if old_dir.exists() and not new_dir.exists():
+        try:
+            shutil.move(str(old_dir), str(new_dir))
+        except Exception:
+            pass
+
+
 def _set_start_on_login(enabled: bool) -> None:
     key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
     # When frozen (PyInstaller), sys.executable IS the app.
@@ -28,10 +41,10 @@ def _set_start_on_login(enabled: bool) -> None:
     try:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_SET_VALUE)
         if enabled:
-            winreg.SetValueEx(key, "MurmurAI", 0, winreg.REG_SZ, exe_cmd)
+            winreg.SetValueEx(key, "Pooky", 0, winreg.REG_SZ, exe_cmd)
         else:
             try:
-                winreg.DeleteValue(key, "MurmurAI")
+                winreg.DeleteValue(key, "Pooky")
             except FileNotFoundError:
                 pass
         winreg.CloseKey(key)
@@ -55,7 +68,7 @@ def _handle_download_error(root, exc: Exception) -> None:
 def _show_download_screen() -> None:
     """Blocking download screen — runs before the main window."""
     root = ctk.CTk()
-    root.title("MurmurAI — First Run")
+    root.title("Pooky — First Run")
     root.geometry("300x160")
     root.resizable(False, False)
 
@@ -77,6 +90,7 @@ def _show_download_screen() -> None:
 
 
 def main() -> None:
+    _migrate_appdata()
     if not is_ready():
         _show_download_screen()
 
