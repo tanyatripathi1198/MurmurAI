@@ -39,11 +39,17 @@ class Controller:
             elif self._state == State.RECORDING:
                 self._end_recording()
 
-    def _begin_recording(self) -> None:
+    def wake_start(self) -> None:
+        """Wake-word triggered recording — 3 second silence window."""
+        with self._lock:
+            if self._state == State.IDLE:
+                self._begin_recording(silence_blocks=30)
+
+    def _begin_recording(self, silence_blocks: int = 10) -> None:
         self._q = queue.Queue()
         self._worker = threading.Thread(target=self._transcribe_loop, daemon=True)
         self._worker.start()
-        self._audio.start(chunk_callback=self._q.put)
+        self._audio.start(chunk_callback=self._q.put, silence_blocks=silence_blocks)
         self._set_state(State.RECORDING)
 
     def _end_recording(self) -> None:

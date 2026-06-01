@@ -71,3 +71,29 @@ def test_state_transitions_reported_in_order():
     assert states[0] == State.RECORDING
     assert State.TYPING in states
     assert states[-1] == State.IDLE
+
+
+def test_wake_start_begins_recording_from_idle():
+    ctrl, audio, *_ = _make()
+    ctrl.wake_start()
+    assert ctrl.state == State.RECORDING
+    audio.start.assert_called_once()
+
+
+def test_wake_start_ignored_when_already_recording():
+    ctrl, audio, *_ = _make()
+    ctrl.toggle()
+    ctrl.wake_start()
+    audio.start.assert_called_once()
+
+
+def test_wake_start_uses_30_silence_blocks():
+    ctrl, audio, *_ = _make()
+    ctrl.wake_start()
+    assert audio.start.call_args.kwargs.get("silence_blocks") == 30
+
+
+def test_toggle_uses_default_10_silence_blocks():
+    ctrl, audio, *_ = _make()
+    ctrl.toggle()
+    assert audio.start.call_args.kwargs.get("silence_blocks", 10) == 10
