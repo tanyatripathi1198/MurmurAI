@@ -9,7 +9,7 @@ try:
 except ImportError:
     _OWWModel = None   # graceful degradation if not installed
 
-MODEL_PATH = Path(os.environ.get("APPDATA", Path.home())) / "Pooky" / "hey_pooky_20260213_081115.tflite"
+MODEL_PATH = Path(os.environ.get("APPDATA", Path.home())) / "Pooky" / "Hey_Nova_20260328_194345.tflite"
 _CHUNK_SAMPLES = 1280   # 80ms at 16kHz
 _THRESHOLD     = 0.5    # detection confidence threshold
 

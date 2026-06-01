@@ -153,7 +153,7 @@ class MurmurWindow(ctk.CTk):
 
         self._wake_var = ctk.BooleanVar(value=self._current_wake)
         ctk.CTkSwitch(
-            self, text="Wake word (Hey Pooky)", variable=self._wake_var,
+            self, text="Wake word (Hey Nova)", variable=self._wake_var,
             font=ctk.CTkFont(size=11),
         ).pack(padx=24, pady=(0, 8), anchor="w")
 
