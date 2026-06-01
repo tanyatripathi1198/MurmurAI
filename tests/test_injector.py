@@ -10,7 +10,7 @@ def test_type_text_copies_to_clipboard_and_pastes():
         from injector import TextInjector
         TextInjector().type_text("hello")
     mock_clip.copy.assert_any_call(" hello")
-    mock_gui.hotkey.assert_called_once_with("ctrl", "v")
+    mock_gui.hotkey.assert_called_once_with("shift", "insert")
 
 
 def test_type_text_restores_clipboard_after_paste():
