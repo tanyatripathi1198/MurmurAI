@@ -6,6 +6,15 @@ import numpy as np
 MODEL_NAME = "small"
 _MODEL_DIR = str(Path(os.environ.get("APPDATA", Path.home())) / "MurmurAI" / "models")
 
+# Common Whisper hallucinations on short/silent audio — suppress these
+_HALLUCINATIONS = {
+    "thank you.", "thank you", "thanks.", "thanks",
+    "thank you for watching.", "thank you for watching",
+    "thanks for watching.", "thanks for watching",
+    "you", "you.", "bye.", "bye", "goodbye.", "goodbye",
+    ".", "..", "...", "♪", "♪♪",
+}
+
 
 class Transcriber:
     def __init__(
@@ -43,10 +52,16 @@ class Transcriber:
             audio,
             language=self._language,
             beam_size=5,
-            vad_filter=False,             # we do our own VAD in audio.py
+            vad_filter=True,              # strips trailing silence → prevents "Thank you" hallucinations
+            vad_parameters={"min_silence_duration_ms": 500},
             condition_on_previous_text=False,
         )
-        return "".join(s.text for s in segments).strip()
+        text = "".join(s.text for s in segments).strip()
+        return "" if _is_hallucination(text) else text
 
     def set_language(self, language: str) -> None:
         self._language = None if language == "auto" else language
+
+
+def _is_hallucination(text: str) -> bool:
+    return text.lower().strip() in _HALLUCINATIONS or len(text.strip()) <= 1

@@ -6,8 +6,8 @@ from typing import Callable, Optional
 SAMPLE_RATE = 16_000
 _BLOCK_SIZE = int(SAMPLE_RATE * 0.1)        # 100ms device blocks
 _SILENCE_THRESHOLD = 0.008                   # RMS below this = silence (tuned to mic noise floor ~0.005)
-_SILENCE_BLOCKS_TO_END = 6                  # 600ms of silence ends a phrase
-_MIN_SPEECH_BLOCKS = 3                       # 300ms minimum for a valid phrase
+_SILENCE_BLOCKS_TO_END = 10                 # 1s of silence ends a phrase (keeps mid-sentence pauses together)
+_MIN_SPEECH_BLOCKS = 5                       # 500ms minimum actual speech for a valid phrase
 _PRE_BUFFER_BLOCKS = 3                       # 300ms pre-buffer to catch consonant onsets before VAD triggers
 
 
@@ -18,6 +18,7 @@ class AudioCapture:
         self._speech_buf: list = []
         self._pre_buf: list = []
         self._silence_count: int = 0
+        self._speech_count: int = 0      # actual speech blocks only (not silence)
         self._speaking: bool = False
 
     def start(self, chunk_callback: Callable[[np.ndarray], None]) -> None:
@@ -27,6 +28,7 @@ class AudioCapture:
         self._speech_buf = []
         self._pre_buf = []
         self._silence_count = 0
+        self._speech_count = 0
         self._speaking = False
         self._stream = sd.InputStream(
             samplerate=SAMPLE_RATE,
@@ -50,6 +52,7 @@ class AudioCapture:
         self._speech_buf = []
         self._pre_buf = []
         self._silence_count = 0
+        self._speech_count = 0
         self._speaking = False
         return np.zeros(0, dtype=np.float32)
 
@@ -65,18 +68,22 @@ class AudioCapture:
                 # Prepend pre-buffer so word onsets aren't clipped
                 self._speech_buf = list(self._pre_buf)
                 self._pre_buf = []
+                self._speech_count = 0
             self._speech_buf.append(block)
+            self._speech_count += 1
             self._silence_count = 0
             self._speaking = True
         elif self._speaking:
             self._speech_buf.append(block)   # include trailing silence
             self._silence_count += 1
             if self._silence_count >= _SILENCE_BLOCKS_TO_END:
-                if len(self._speech_buf) >= _MIN_SPEECH_BLOCKS and self._chunk_cb:
+                # Only fire if there was enough actual speech (not just noise)
+                if self._speech_count >= _MIN_SPEECH_BLOCKS and self._chunk_cb:
                     phrase = np.concatenate(self._speech_buf).astype(np.float32)
                     self._chunk_cb(phrase)
                 self._speech_buf = []
                 self._silence_count = 0
+                self._speech_count = 0
                 self._speaking = False
         else:
             # Not speaking — maintain rolling pre-buffer
