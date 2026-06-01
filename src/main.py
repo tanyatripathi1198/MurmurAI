@@ -105,6 +105,10 @@ def main() -> None:
 
     transcriber.load()   # ~1-2s on first call; blocks here intentionally
 
+    # Warm up XNNPACK delegate — first transcription takes 700ms without this
+    import numpy as _np
+    transcriber.transcribe(_np.zeros(16_000, dtype=_np.float32))
+
     # controller is referenced by the lambda before assignment — that is fine
     # because the lambda is only called after controller is created below.
     controller: Controller  # forward declaration for type checkers
