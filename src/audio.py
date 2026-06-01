@@ -9,6 +9,7 @@ TARGET_RATE = 16_000                         # Whisper requires 16kHz
 _BLOCK_MS = 100                              # process audio in 100ms blocks
 _SILENCE_THRESHOLD = 0.008                   # RMS below this = silence
 _SILENCE_BLOCKS_TO_END = 10                 # 1s of silence ends a phrase
+_SILENCE_BLOCKS_EARLY_FIRE = 2              # 200ms — fire phrase early so transcription starts ASAP
 _MIN_SPEECH_BLOCKS = 5                       # 500ms minimum actual speech
 _PRE_BUFFER_BLOCKS = 3                       # 300ms pre-buffer for word onsets
 
@@ -95,6 +96,17 @@ class AudioCapture:
         elif self._speaking:
             self._speech_buf.append(block)
             self._silence_count += 1
+
+            # Fire phrase early (200ms silence) so transcription overlaps with
+            # the remaining silence window — saves 800ms–2.5s of perceived latency
+            if self._silence_count == _SILENCE_BLOCKS_EARLY_FIRE:
+                if self._speech_count >= _MIN_SPEECH_BLOCKS and self._chunk_cb:
+                    self._chunk_cb(self._build_phrase())
+                # Reset speech buffer; keep counting silence for auto-stop
+                self._speech_buf = []
+                self._speech_count = 0
+
+            # Full silence window: flush any speech since early fire + signal end
             if self._silence_count >= self._silence_blocks_to_end:
                 if self._speech_count >= _MIN_SPEECH_BLOCKS and self._chunk_cb:
                     self._chunk_cb(self._build_phrase())
