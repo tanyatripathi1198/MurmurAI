@@ -53,6 +53,7 @@ class MurmurWindow(ctk.CTk):
     # ----------------------------------------------------------- main card view
 
     def _show_main(self) -> None:
+        self.geometry("240x290")   # restore normal height
         for w in self.winfo_children():
             w.destroy()
 
@@ -122,6 +123,7 @@ class MurmurWindow(ctk.CTk):
     # --------------------------------------------------------- settings panel (stub — Task 11)
 
     def _show_settings(self) -> None:
+        self.geometry("240x360")   # taller to fit all settings fields
         for w in self.winfo_children():
             w.destroy()
 
