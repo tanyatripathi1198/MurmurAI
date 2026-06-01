@@ -5,7 +5,18 @@ from typing import Optional, Type
 import numpy as np
 
 MODEL_NAME = "small"
-_MODEL_DIR = str(Path(os.environ.get("APPDATA", Path.home())) / "MurmurAI" / "models")
+_MODEL_DIR = Path(os.environ.get("APPDATA", Path.home())) / "Pooky" / "models"
+
+
+def _local_model_path() -> str:
+    """Return the direct snapshot path if available, otherwise fall back to model name."""
+    refs = _MODEL_DIR / f"models--Systran--faster-whisper-{MODEL_NAME}" / "refs" / "main"
+    if refs.exists():
+        rev = refs.read_text(encoding="utf-8").strip()
+        snapshot = _MODEL_DIR / f"models--Systran--faster-whisper-{MODEL_NAME}" / "snapshots" / rev
+        if snapshot.exists():
+            return str(snapshot)
+    return MODEL_NAME
 
 
 class Transcriber:
@@ -31,10 +42,9 @@ class Transcriber:
         else:
             cls = self._model_cls
         self._model = cls(
-            MODEL_NAME,
+            _local_model_path(),  # direct snapshot path avoids HuggingFace network calls
             device="cpu",
             compute_type="int8",
-            download_root=_MODEL_DIR,
         )
 
     def transcribe(self, audio: np.ndarray) -> str:
