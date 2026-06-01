@@ -87,10 +87,10 @@ def test_wake_start_ignored_when_already_recording():
     audio.start.assert_called_once()
 
 
-def test_wake_start_uses_30_silence_blocks():
+def test_wake_start_uses_15_silence_blocks():
     ctrl, audio, *_ = _make()
     ctrl.wake_start()
-    assert audio.start.call_args.kwargs.get("silence_blocks") == 30
+    assert audio.start.call_args.kwargs.get("silence_blocks") == 15
 
 
 def test_toggle_uses_default_10_silence_blocks():

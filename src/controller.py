@@ -41,10 +41,10 @@ class Controller:
                 self._end_recording()
 
     def wake_start(self) -> None:
-        """Wake-word triggered recording — 3s silence window, auto-stops after phrase."""
+        """Wake-word triggered recording — 1.5s silence window, auto-stops after phrase."""
         with self._lock:
             if self._state == State.IDLE:
-                self._begin_recording(silence_blocks=30, auto_stop=True)
+                self._begin_recording(silence_blocks=15, auto_stop=True)
 
     def _begin_recording(self, silence_blocks: int = 10, auto_stop: bool = False) -> None:
         self._q = queue.Queue()
