@@ -92,6 +92,13 @@ def _show_download_screen() -> None:
 
 
 def main() -> None:
+    # Fix taskbar: group app correctly and show custom icon
+    import ctypes as _ct
+    try:
+        _ct.windll.shell32.SetCurrentProcessExplicitAppUserModelID("NovaaAI.VoiceToText")
+    except Exception:
+        pass
+
     _migrate_appdata()
     if not is_ready():
         _show_download_screen()
@@ -156,6 +163,14 @@ def main() -> None:
         start_on_login=settings.start_on_login,
         wake_word_enabled=settings.wake_word_enabled,
     )
+
+    # Set window icon (fixes "python" in taskbar)
+    try:
+        from icon_maker import ensure_icon
+        ico = ensure_icon()
+        window.after(100, lambda: window.iconbitmap(ico))
+    except Exception:
+        pass
 
     def on_state_change(state: State) -> None:
         window.after(0, lambda s=state: window.update_state(s))
