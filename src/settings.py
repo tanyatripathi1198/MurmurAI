@@ -12,6 +12,7 @@ class Settings:
     hotkey: str = "ctrl+shift+space"
     language: str = "auto"
     start_on_login: bool = False
+    wake_word_enabled: bool = False
 
 
 def load() -> Settings:

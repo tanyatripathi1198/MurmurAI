@@ -42,3 +42,20 @@ def test_load_returns_defaults_on_corrupt_json(tmp_path):
         import importlib, settings
         s = settings.load()
     assert s.hotkey == "ctrl+shift+space"
+
+
+def test_settings_defaults_include_wake_word_enabled(tmp_path):
+    with patch("settings.SETTINGS_PATH", tmp_path / "s.json"), \
+         patch("settings.APPDATA_DIR", tmp_path):
+        from settings import load
+        s = load()
+    assert s.wake_word_enabled is False
+
+
+def test_wake_word_enabled_roundtrip(tmp_path):
+    with patch("settings.SETTINGS_PATH", tmp_path / "s.json"), \
+         patch("settings.APPDATA_DIR", tmp_path):
+        from settings import load, save, Settings
+        save(Settings(wake_word_enabled=True))
+        s = load()
+    assert s.wake_word_enabled is True
