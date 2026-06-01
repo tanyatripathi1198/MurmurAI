@@ -3,6 +3,7 @@ import threading
 from enum import Enum
 from typing import Callable, Optional
 import numpy as np
+from sounds import play_start, play_stop
 
 
 class State(Enum):
@@ -59,9 +60,11 @@ class Controller:
             silence_blocks=silence_blocks,
             on_phrase_end=_on_phrase_end if auto_stop else None,
         )
+        play_start()
         self._set_state(State.RECORDING)
 
     def _end_recording(self) -> None:
+        play_stop()
         try:
             self._audio.stop()   # fires chunk_callback for any buffered speech
         except Exception:
