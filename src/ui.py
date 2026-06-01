@@ -45,7 +45,7 @@ class MurmurWindow(ctk.CTk):
     # ------------------------------------------------------------------ window
 
     def _setup_window(self) -> None:
-        self.title("Pooky")
+        self.title("Novaa AI")
         self.geometry("240x290")
         self.resizable(False, False)
         self.protocol("WM_DELETE_WINDOW", self.withdraw)
@@ -58,7 +58,7 @@ class MurmurWindow(ctk.CTk):
             w.destroy()
 
         ctk.CTkLabel(
-            self, text="POOKY",
+            self, text="NOVAA AI",
             font=ctk.CTkFont(size=11, weight="bold"),
             text_color="#888888",
         ).pack(pady=(22, 0))

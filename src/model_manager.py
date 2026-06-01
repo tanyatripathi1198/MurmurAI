@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Optional, Type
 
 MODEL_NAME = "small"
-MODEL_DIR = Path(os.environ.get("APPDATA", Path.home())) / "Pooky" / "models"
+MODEL_DIR = Path(os.environ.get("APPDATA", Path.home())) / "NovaaAI" / "models"
 _MARKER = MODEL_DIR / ".model_ready"
 
 

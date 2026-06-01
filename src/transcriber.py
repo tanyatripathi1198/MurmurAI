@@ -5,7 +5,7 @@ from typing import Optional, Type
 import numpy as np
 
 MODEL_NAME = "small"
-_MODEL_DIR = Path(os.environ.get("APPDATA", Path.home())) / "Pooky" / "models"
+_MODEL_DIR = Path(os.environ.get("APPDATA", Path.home())) / "NovaaAI" / "models"
 
 
 def _local_model_path() -> str:

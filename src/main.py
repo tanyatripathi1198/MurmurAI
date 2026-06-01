@@ -20,11 +20,11 @@ from wake_word import WakeWordListener, MODEL_PATH
 
 
 def _migrate_appdata() -> None:
-    """Move %APPDATA%\\MurmurAI -> %APPDATA%\\Pooky on first launch after rename."""
+    """Move %APPDATA%\\Pooky -> %APPDATA%\\NovaaAI on first launch after rename."""
     import shutil
     base = Path(os.environ.get("APPDATA", Path.home()))
-    old_dir = base / "MurmurAI"
-    new_dir = base / "Pooky"
+    old_dir = base / "Pooky"
+    new_dir = base / "NovaaAI"
     if old_dir.exists() and not new_dir.exists():
         try:
             shutil.move(str(old_dir), str(new_dir))
@@ -43,10 +43,10 @@ def _set_start_on_login(enabled: bool) -> None:
     try:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_SET_VALUE)
         if enabled:
-            winreg.SetValueEx(key, "Pooky", 0, winreg.REG_SZ, exe_cmd)
+            winreg.SetValueEx(key, "NovaaAI", 0, winreg.REG_SZ, exe_cmd)
         else:
             try:
-                winreg.DeleteValue(key, "Pooky")
+                winreg.DeleteValue(key, "NovaaAI")
             except FileNotFoundError:
                 pass
         winreg.CloseKey(key)
@@ -70,7 +70,7 @@ def _handle_download_error(root, exc: Exception) -> None:
 def _show_download_screen() -> None:
     """Blocking download screen — runs before the main window."""
     root = ctk.CTk()
-    root.title("Pooky — First Run")
+    root.title("Novaa AI — First Run")
     root.geometry("300x160")
     root.resizable(False, False)
 

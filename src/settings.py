@@ -3,7 +3,7 @@ import os
 from dataclasses import dataclass, asdict
 from pathlib import Path
 
-APPDATA_DIR = Path(os.environ.get("APPDATA", Path.home())) / "Pooky"
+APPDATA_DIR = Path(os.environ.get("APPDATA", Path.home())) / "NovaaAI"
 SETTINGS_PATH = APPDATA_DIR / "settings.json"
 
 
