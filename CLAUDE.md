@@ -114,5 +114,5 @@ Hotkey format: lowercase, `+` separated, e.g. `ctrl+shift+space`, `ctrl+f1`.
 
 ## Spec and plan docs
 
-- Design spec: `docs/superpowers/specs/2026-05-31-murmurai-design.md`
-- Implementation plan: `docs/superpowers/plans/2026-05-31-murmurai.md`
+- Design spec: `docs/superpowers/specs/2026-05-31-novaaai-design.md`
+- Implementation plan: `docs/superpowers/plans/2026-05-31-novaaai.md`
