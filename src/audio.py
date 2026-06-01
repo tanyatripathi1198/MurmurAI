@@ -8,7 +8,7 @@ from typing import Callable, Optional
 TARGET_RATE = 16_000                         # Whisper requires 16kHz
 _BLOCK_MS = 100                              # process audio in 100ms blocks
 _SILENCE_THRESHOLD = 0.008                   # RMS below this = silence
-_SILENCE_BLOCKS_TO_END = 6                  # 600ms of silence ends a phrase
+_SILENCE_BLOCKS_TO_END = 10                 # 1s of silence ends a phrase
 _MIN_SPEECH_BLOCKS = 5                       # 500ms minimum actual speech
 _PRE_BUFFER_BLOCKS = 3                       # 300ms pre-buffer for word onsets
 

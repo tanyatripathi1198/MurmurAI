@@ -20,9 +20,13 @@ class TextInjector:
             # Leading space prevents new text from running into the previous word.
             # Matches the approach used by Yap and similar dictation tools.
             pyperclip.copy(" " + text)
-            time.sleep(0.02)          # give clipboard time to populate
+            time.sleep(0.05)          # give clipboard time to populate
+            # Shift+Insert is the universal Windows paste shortcut.
+            # It works in editors, browsers, Notepad AND terminal emulators
+            # (xterm.js / VS Code terminal, Windows Terminal, ConHost).
+            # Ctrl+V fails in terminals; Ctrl+Shift+V only works in some.
             pyautogui.hotkey("shift", "insert")
-            time.sleep(0.05)          # give the target app time to process the paste
+            time.sleep(0.1)           # give the target app time to process the paste
         finally:
             try:
                 pyperclip.copy(original)
