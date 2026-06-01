@@ -24,7 +24,7 @@ _STATE_PROPS = {
 }
 
 
-class MurmurWindow(ctk.CTk):
+class NovaaAIWindow(ctk.CTk):
     def __init__(
         self,
         on_toggle: Callable[[], None],

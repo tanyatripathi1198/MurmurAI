@@ -1,4 +1,4 @@
-# MurmurAI — Wake Word ("Hey Murmur") Design Spec
+# Novaa AI — Wake Word ("Hey Nova") Design Spec
 **Date:** 2026-06-01
 **Status:** Approved
 
@@ -6,15 +6,15 @@
 
 ## Overview
 
-Add always-listening wake word detection to MurmurAI using Picovoice Porcupine. Saying "Hey Murmur" starts recording automatically without pressing the hotkey. Recording stops after 3 seconds of silence (vs 1 second for hotkey-triggered recording) to tolerate natural thinking pauses. Wake word is opt-in via a settings toggle.
+Add always-listening wake word detection to Novaa AI using Picovoice Porcupine. Saying "Hey Nova" starts recording automatically without pressing the hotkey. Recording stops after 3 seconds of silence (vs 1 second for hotkey-triggered recording) to tolerate natural thinking pauses. Wake word is opt-in via a settings toggle.
 
 ---
 
 ## User Setup (one-time)
 
 1. Sign up at `picovoice.ai` → copy the free access key from the console dashboard.
-2. In the Porcupine console → Create Wake Word → type "Hey Murmur" → train → download `.ppn` file → place at `%APPDATA%\MurmurAI\hey_murmur.ppn`.
-3. In MurmurAI settings → enable "Wake word" toggle → paste access key → Save.
+2. In the Porcupine console → Create Wake Word → type "Hey Nova" → train → download `.ppn` file → place at `%APPDATA%\NovaaAI\hey_nova.ppn`.
+3. In Novaa AI settings → enable "Wake word" toggle → paste access key → Save.
 
 ---
 
@@ -23,7 +23,7 @@ Add always-listening wake word detection to MurmurAI using Picovoice Porcupine. 
 ```
 WakeWordListener (background thread)
   └── own sounddevice stream (16kHz, int16, 512-sample frames)
-  └── pvporcupine.process(frame) → fires on "Hey Murmur"
+  └── pvporcupine.process(frame) → fires on "Hey Nova"
   └── on_detect() → controller.wake_start() [only if IDLE]
 
 Controller
@@ -52,7 +52,7 @@ WakeWordListener(access_key, model_path, on_detect)
 - Audio callback: float32 → int16 conversion → `porcupine.process(frame)`
 - If `process()` returns `>= 0`: detection — calls `on_detect()`
 - `on_detect` is guarded in `main.py`: only fires if `controller.state == State.IDLE`
-- Model path defaults to `%APPDATA%\MurmurAI\hey_murmur.ppn`
+- Model path defaults to `%APPDATA%\NovaaAI\hey_nova.ppn`
 
 ---
 
@@ -81,7 +81,7 @@ Settings panel gets two new fields (below language dropdown):
 - `CTkEntry` — "Picovoice key" (only visible when switch is on)
 - `_save_settings()` passes `wake_word_enabled` and `picovoice_key` to `on_settings_save`
 
-`MurmurWindow.__init__` signature gains `wake_word_enabled: bool = False` and `picovoice_key: str = ""`.
+`NovaaAIWindow.__init__` signature gains `wake_word_enabled: bool = False` and `picovoice_key: str = ""`.
 
 ### `src/main.py`
 - On startup: if `settings.wake_word_enabled` and `settings.picovoice_key`: create and start `WakeWordListener`
@@ -95,7 +95,7 @@ Settings panel gets two new fields (below language dropdown):
 
 | Scenario | Behaviour |
 |---|---|
-| `.ppn` file not found | Settings shows red label: "Model file not found at %APPDATA%\MurmurAI\hey_murmur.ppn" |
+| `.ppn` file not found | Settings shows red label: "Model file not found at %APPDATA%\NovaaAI\hey_nova.ppn" |
 | Invalid access key | Porcupine raises on `start()` → settings shows: "Invalid Picovoice access key" |
 | `pvporcupine` not installed | Skip wake word on startup; settings panel shows: "Install pvporcupine to use this feature" |
 | Wake word fires while recording | Ignored — `on_detect` checks `controller.state == State.IDLE` |

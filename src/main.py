@@ -15,7 +15,7 @@ from injector import TextInjector
 from hotkey import HotkeyManager
 from controller import Controller, State
 from tray import TrayIcon
-from ui import MurmurWindow
+from ui import NovaaAIWindow
 from wake_word import WakeWordListener, MODEL_PATH
 
 
@@ -150,7 +150,7 @@ def main() -> None:
             if wake_listener:
                 wake_listener.stop()
 
-    window = MurmurWindow(
+    window = NovaaAIWindow(
         on_toggle=lambda: controller.toggle(),
         on_settings_save=handle_settings_save,
         start_on_login=settings.start_on_login,

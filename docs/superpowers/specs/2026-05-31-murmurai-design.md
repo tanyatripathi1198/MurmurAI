@@ -1,12 +1,11 @@
-# MurmurAI — Design Spec
+# Novaa AI — Design Spec
 **Date:** 2026-05-31  
 **Status:** Approved
 
 ---
-
 ## Overview
 
-MurmurAI is a Windows desktop app that transcribes speech in real-time and types the result directly into whatever window is currently focused. It runs as a system-tray app with a small card UI, activated via a customizable global hotkey or an on-screen button. All transcription runs locally using OpenAI's Whisper model — no internet or API key required.
+Novaa AI is a Windows desktop app that transcribes speech in real-time and types the result directly into whatever window is currently focused. It runs as a system-tray app with a small card UI, activated via a customizable global hotkey or an on-screen button. All transcription runs locally using OpenAI's Whisper model — no internet or API key required.
 
 ---
 
@@ -68,7 +67,7 @@ Single Python process with four logical layers:
 - **Hotkey field:** click-to-capture — user clicks field and presses their desired combo
 - **Language dropdown:** defaults to "Auto-detect"; scrollable list of all Whisper-supported languages (~100)
 - **Start on login toggle:** registers/removes Windows startup entry
-- Save button persists to `%APPDATA%\MurmurAI\settings.json`
+- Save button persists to `%APPDATA%\NovaaAI\settings.json`
 
 ### System Tray
 - Tray icon mirrors recording state color (grey/red/blue)
@@ -127,7 +126,7 @@ Microphone
 
 ## First-Run Experience
 
-1. App launches → checks for model files in `%APPDATA%\MurmurAI\models\`
+1. App launches → checks for model files in `%APPDATA%\NovaaAI\models\`
 2. If not found: progress bar replaces mic button during download (~500MB); app is non-functional until complete
 3. After download: hotkey setup prompt (confirm default or set custom)
 4. Ready — user lands on idle card
@@ -142,7 +141,7 @@ Microphone
 | Model download fails | Retry button shown; error logged |
 | Silent audio chunk | VAD skips it; nothing injected |
 | Target window loses focus mid-dictation | Text injects into newly focused window (by design) |
-| Unhandled exception | Logged to `%APPDATA%\MurmurAI\logs\murmurai.log`; tray icon turns grey |
+| Unhandled exception | Logged to `%APPDATA%\NovaaAI\logs\novaaai.log`; tray icon turns grey |
 
 ---
 
@@ -150,8 +149,8 @@ Microphone
 
 - **Bundler:** PyInstaller → single `.exe`, no Python install required
 - **Model files:** downloaded at first run (not bundled, too large)
-- **Settings:** `%APPDATA%\MurmurAI\settings.json`
-- **Logs:** `%APPDATA%\MurmurAI\logs\murmurai.log`
+- **Settings:** `%APPDATA%\NovaaAI\settings.json`
+- **Logs:** `%APPDATA%\NovaaAI\logs\novaaai.log`
 - **Start on login:** Windows registry `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` (optional, toggled in settings)
 
 ---
@@ -174,7 +173,7 @@ Microphone
 ## Out of Scope
 
 - macOS / Linux support
-- Wake-word activation (e.g. "Hey Murmur")
+- Wake-word activation (e.g. "Hey Nova")
 - Punctuation commands (e.g. "comma", "new line")
 - Cloud transcription fallback
 - Multi-microphone selection (uses system default)
