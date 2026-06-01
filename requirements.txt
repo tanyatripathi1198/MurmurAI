@@ -9,3 +9,4 @@ Pillow>=10.0.0
 pyperclip>=1.9.0
 pyautogui>=0.9.54
 openwakeword>=0.6.0
+ai-edge-litert>=2.0.0
