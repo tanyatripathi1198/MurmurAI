@@ -5,7 +5,7 @@ from typing import Callable, Optional
 
 SAMPLE_RATE = 16_000
 _BLOCK_SIZE = int(SAMPLE_RATE * 0.1)        # 100ms device blocks
-_SILENCE_THRESHOLD = 0.02                    # RMS below this = silence
+_SILENCE_THRESHOLD = 0.008                   # RMS below this = silence (tuned to mic noise floor ~0.005)
 _SILENCE_BLOCKS_TO_END = 6                  # 600ms of silence ends a phrase
 _MIN_SPEECH_BLOCKS = 3                       # 300ms minimum for a valid phrase
 
