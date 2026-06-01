@@ -3,9 +3,10 @@ import pytest
 from unittest.mock import MagicMock, patch
 
 
-def _make_segment(text):
+def _make_segment(text, no_speech_prob=0.1):
     s = MagicMock()
     s.text = text
+    s.no_speech_prob = no_speech_prob
     return s
 
 
