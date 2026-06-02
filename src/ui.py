@@ -20,14 +20,12 @@ def _ls(text: str) -> str:
 
 _ICON_COLOR = "#9c9c9f"   # icon stays muted white in every state
 
-# (border_color, border_width, btn_bg, status_text, status_color, icon, icon_size)
-# Recording: CSS border rgba(255,80,100,0.35) → #60232a, bg #200d14
-# Typing:    CSS border rgba(80,140,255,0.3)  → #203254, bg #0d1420
-# ⌨ uses text-variant (U+2328+FE0E) at smaller size — centers better than emoji
+# (ring_color, btn_bg, status_text, status_color, icon, icon_size)
+# Ring frame acts as the border — no CTkButton border_width (avoids DPI clipping)
 _STATE_PROPS = {
-    State.IDLE:      ("#2a2a32", 1, "#141419", _ls("PRESS TO RECORD"), "#545457", "🎙",    24),
-    State.RECORDING: ("#60232a", 1, "#200d14", _ls("RECORDING"),       "#ff6070", "🎙",    24),
-    State.TYPING:    ("#203254", 1, "#0d1420", _ls("TYPING"),           "#7ab0ff", "⌨️", 25),
+    State.IDLE:      ("#2a2a32", "#141419", _ls("PRESS TO RECORD"), "#545457", "🎙",    26),
+    State.RECORDING: ("#60232a", "#200d14", _ls("RECORDING"),       "#ff6070", "🎙",    26),
+    State.TYPING:    ("#203254", "#0d1420", _ls("TYPING"),           "#7ab0ff", "⌨️", 25),
 }
 
 
@@ -85,20 +83,24 @@ class NovaaAIWindow(ctk.CTk):
         # 1px separator line
         ctk.CTkFrame(self, height=1, fg_color="#1c1c20", corner_radius=0).pack(fill="x")
 
-        # ── mic button — fixed-size square wrapper prevents oval distortion ──
-        # Without the wrapper, pack() allows horizontal stretching → oval shape
-        _btn_wrap = ctk.CTkFrame(self, fg_color="#0b0b0f", width=96, height=96)
-        _btn_wrap.pack(pady=(20, 0))
-        _btn_wrap.pack_propagate(False)
+        # ── mic button — ring frame IS the border (no CTkButton border_width) ──
+        # CTkButton border_width causes DPI anti-aliasing clipping → use colored
+        # ring frame instead. Button sits inside showing 4px of ring as the border.
+        self._mic_ring = ctk.CTkFrame(
+            self, width=90, height=90,
+            fg_color="#2a2a32",    # idle border colour
+            corner_radius=45,      # perfect circle (90/2)
+        )
+        self._mic_ring.pack(pady=(20, 0))
+        self._mic_ring.pack_propagate(False)
 
         self._mic_btn = ctk.CTkButton(
-            _btn_wrap, text="🎙", width=80, height=80,
-            corner_radius=50,
+            self._mic_ring, text="🎙", width=82, height=82,
+            corner_radius=41,      # perfect circle (82/2)
             font=("Segoe UI Emoji", 26),
             fg_color="#141419",
             hover_color="#1e1e28",
-            border_width=2,
-            border_color="#2a2a32",
+            border_width=0,        # no CTkButton border — ring frame handles it
             text_color=_ICON_COLOR,
             command=self._on_toggle,
         )
@@ -151,15 +153,14 @@ class NovaaAIWindow(ctk.CTk):
     def update_state(self, state: State) -> None:
         if not hasattr(self, "_mic_btn"):
             return
-        border_color, border_width, btn_bg, label, status_color, icon, icon_size = _STATE_PROPS[state]
-        # Segoe UI Emoji gives consistent centering for both mic and keyboard
-        font = ("Segoe UI Emoji", icon_size)
-        # Background + border change per state; icon stays muted white always
+        ring_color, btn_bg, label, status_color, icon, icon_size = _STATE_PROPS[state]
+        # Ring frame changes colour; button background changes; icon stays white
+        if hasattr(self, "_mic_ring"):
+            self._mic_ring.configure(fg_color=ring_color)
         self._mic_btn.configure(
             fg_color=btn_bg,
-            border_color=border_color, border_width=border_width,
             text=icon, text_color=_ICON_COLOR,
-            font=font,
+            font=("Segoe UI Emoji", icon_size),
         )
         self._status_lbl.configure(text=label, text_color=status_color)
         if hasattr(self, "_hint_lbl"):
