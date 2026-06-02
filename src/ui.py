@@ -87,8 +87,8 @@ class NovaaAIWindow(ctk.CTk):
 
         # ── mic button — fixed-size square wrapper prevents oval distortion ──
         # Without the wrapper, pack() allows horizontal stretching → oval shape
-        _btn_wrap = ctk.CTkFrame(self, fg_color="transparent", width=84, height=84)
-        _btn_wrap.pack(pady=(28, 0))
+        _btn_wrap = ctk.CTkFrame(self, fg_color="#0b0b0f", width=96, height=96)
+        _btn_wrap.pack(pady=(24, 0))
         _btn_wrap.pack_propagate(False)
 
         self._mic_btn = ctk.CTkButton(
