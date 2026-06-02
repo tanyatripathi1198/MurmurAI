@@ -20,11 +20,13 @@ def _ls(text: str) -> str:
 
 _ICON_COLOR = "#9c9c9f"   # icon stays muted white in every state
 
-# (ring_border_color, ring_border_width, status_text, status_color, icon)
+# (border_color, border_width, btn_bg, status_text, status_color, icon)
+# Recording: CSS border rgba(255,80,100,0.35) → #60232a, bg #200d14
+# Typing:    CSS border rgba(80,140,255,0.3)  → #203254, bg #0d1420
 _STATE_PROPS = {
-    State.IDLE:      ("#2a2a32", 1, _ls("PRESS TO RECORD"), "#545457", "🎙"),
-    State.RECORDING: ("#e94560", 2, _ls("RECORDING"),       "#e94560", "🎙"),
-    State.TYPING:    ("#3a7aff", 2, _ls("TYPING"),           "#3a7aff", "⌨️"),
+    State.IDLE:      ("#2a2a32", 1, "#141419", _ls("PRESS TO RECORD"), "#545457", "🎙"),
+    State.RECORDING: ("#60232a", 1, "#200d14", _ls("RECORDING"),       "#ff6070", "🎙"),
+    State.TYPING:    ("#203254", 1, "#0d1420", _ls("TYPING"),           "#7ab0ff", "⌨️"),
 }
 
 
@@ -143,10 +145,11 @@ class NovaaAIWindow(ctk.CTk):
     def update_state(self, state: State) -> None:
         if not hasattr(self, "_mic_btn"):
             return
-        ring_color, ring_width, label, status_color, icon = _STATE_PROPS[state]
-        # Border changes colour/width — icon stays muted white always
+        border_color, border_width, btn_bg, label, status_color, icon = _STATE_PROPS[state]
+        # Background + border change per state; icon stays muted white always
         self._mic_btn.configure(
-            border_color=ring_color, border_width=ring_width,
+            fg_color=btn_bg,
+            border_color=border_color, border_width=border_width,
             text=icon, text_color=_ICON_COLOR,
         )
         self._status_lbl.configure(text=label, text_color=status_color)
