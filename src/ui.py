@@ -13,13 +13,19 @@ LANGUAGES = [
     "cs", "ro", "hu", "fi", "da", "no", "id", "ms", "bn", "fa",
 ]
 
+def _ls(text: str) -> str:
+    """~3px letter-spacing: space letters within words, double-space between."""
+    return "  ".join(" ".join(w) for w in text.split())
+
+
+_ICON_COLOR = "#9c9c9f"   # icon stays muted white in every state
+
 # (ring_border_color, ring_border_width, status_text, status_color, icon)
 _STATE_PROPS = {
-    State.IDLE:      ("#2a2a32", 1, "PRESS TO RECORD", "#545457", "🎙"),
-    State.RECORDING: ("#e94560", 2, "RECORDING",       "#e94560", "🎙"),
-    State.TYPING:    ("#3a7aff", 2, "TYPING",           "#3a7aff", "⌨️"),
+    State.IDLE:      ("#2a2a32", 1, _ls("PRESS TO RECORD"), "#545457", "🎙"),
+    State.RECORDING: ("#e94560", 2, _ls("RECORDING"),       "#e94560", "🎙"),
+    State.TYPING:    ("#3a7aff", 2, _ls("TYPING"),           "#3a7aff", "⌨️"),
 }
-_ICON_COLOR = "#9c9c9f"   # icon stays muted white in every state
 
 
 class NovaaAIWindow(ctk.CTk):
