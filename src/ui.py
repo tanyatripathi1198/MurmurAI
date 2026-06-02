@@ -116,16 +116,20 @@ class NovaaAIWindow(ctk.CTk):
         footer = ctk.CTkFrame(self, fg_color="#0b0b0f", corner_radius=0)
         footer.pack(side="bottom", fill="x", padx=16, pady=12)
 
-        self._lang_lbl = ctk.CTkLabel(
-            footer, text=self._lang_display(),
-            font=ctk.CTkFont(size=9), text_color="#4a7aaa",
-        )
+        # Language: globe icon in blue, text in muted white
+        lang_row = ctk.CTkFrame(footer, fg_color="transparent")
+        lang_row.pack(side="left")
+        ctk.CTkLabel(lang_row, text="🌐",
+                     font=ctk.CTkFont(size=9), text_color="#4a7aaa").pack(side="left")
+        self._lang_lbl = ctk.CTkLabel(lang_row, text=f" {self._lang_text()}",
+                                       font=ctk.CTkFont(size=9), text_color="#555558")
         self._lang_lbl.pack(side="left")
 
+        # Settings: ◈ icon — elegant diamond shape, clean and minimal
         ctk.CTkButton(
-            footer, text="⚙", width=28, height=28,
+            footer, text="◈", width=24, height=24,
             fg_color="transparent", hover_color="#1a1a22",
-            text_color="#666672", font=ctk.CTkFont(size=14),
+            text_color="#555560", font=ctk.CTkFont(size=13),
             command=self._show_settings,
         ).pack(side="right")
 
@@ -153,10 +157,13 @@ class NovaaAIWindow(ctk.CTk):
     def update_language_display(self, language: str) -> None:
         self._current_language = language
         if hasattr(self, "_lang_lbl"):
-            self._lang_lbl.configure(text=self._lang_display())
+            self._lang_lbl.configure(text=f" {self._lang_text()}")
 
-    def _lang_display(self) -> str:
-        return f"🌐 {'auto' if self._current_language == 'auto' else self._current_language}"
+    def _lang_text(self) -> str:
+        return "auto" if self._current_language == "auto" else self._current_language
+
+    def _lang_display(self) -> str:  # kept for any legacy calls
+        return f"🌐 {self._lang_text()}"
 
     # ── settings panel ───────────────────────────────────────────────────
 
