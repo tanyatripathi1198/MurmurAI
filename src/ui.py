@@ -98,7 +98,7 @@ class NovaaAIWindow(ctk.CTk):
 
         # ── status: uppercase, letter-spaced feel ──
         self._status_lbl = ctk.CTkLabel(
-            self, text="PRESS TO RECORD",
+            self, text=_ls("PRESS TO RECORD"),
             font=ctk.CTkFont(size=9, weight="normal"),
             text_color="#545457",
         )
