@@ -27,7 +27,7 @@ _ICON_COLOR = "#9c9c9f"   # icon stays muted white in every state
 _STATE_PROPS = {
     State.IDLE:      ("#2a2a32", 1, "#141419", _ls("PRESS TO RECORD"), "#545457", "🎙",    24),
     State.RECORDING: ("#60232a", 1, "#200d14", _ls("RECORDING"),       "#ff6070", "🎙",    24),
-    State.TYPING:    ("#203254", 1, "#0d1420", _ls("TYPING"),           "#7ab0ff", "⌨️", 22),
+    State.TYPING:    ("#203254", 1, "#0d1420", _ls("TYPING"),           "#7ab0ff", "⌨️", 25),
 }
 
 
@@ -53,7 +53,7 @@ class NovaaAIWindow(ctk.CTk):
 
     def _setup_window(self) -> None:
         self.title("Novaa AI")
-        self.geometry("240x275")
+        self.geometry("240x292")
         self.resizable(False, False)
         self.configure(fg_color="#0b0b0f")
         self.protocol("WM_DELETE_WINDOW", self.withdraw)
@@ -61,7 +61,7 @@ class NovaaAIWindow(ctk.CTk):
     # ── main card ───────────────────────────────────────────────────────
 
     def _show_main(self) -> None:
-        self.geometry("240x275")
+        self.geometry("240x292")
         for w in self.winfo_children():
             w.destroy()
 
@@ -88,7 +88,7 @@ class NovaaAIWindow(ctk.CTk):
         # ── mic button — fixed-size square wrapper prevents oval distortion ──
         # Without the wrapper, pack() allows horizontal stretching → oval shape
         _btn_wrap = ctk.CTkFrame(self, fg_color="#0b0b0f", width=96, height=96)
-        _btn_wrap.pack(pady=(24, 0))
+        _btn_wrap.pack(pady=(20, 0))
         _btn_wrap.pack_propagate(False)
 
         self._mic_btn = ctk.CTkButton(
