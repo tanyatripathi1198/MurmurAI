@@ -75,7 +75,7 @@ class NovaaAIWindow(ctk.CTk):
                      text_color="#0b0b0f").place(relx=0.5, rely=0.5, anchor="center")
 
         # App name: thin, muted, uppercase — matches mockup letter-spacing feel
-        ctk.CTkLabel(bar, text="NOVAA AI",
+        ctk.CTkLabel(bar, text=_ls("NOVAA AI"),
                      font=ctk.CTkFont(size=9, weight="normal"),
                      text_color="#6d6d6f").pack(side="left", pady=11)
 
@@ -187,7 +187,7 @@ class NovaaAIWindow(ctk.CTk):
         logo_box.pack_propagate(False)
         ctk.CTkLabel(logo_box, text="N", font=ctk.CTkFont(size=13, weight="bold"),
                      text_color="#0b0b0f").place(relx=0.5, rely=0.5, anchor="center")
-        ctk.CTkLabel(bar, text="SETTINGS",
+        ctk.CTkLabel(bar, text=_ls("SETTINGS"),
                      font=ctk.CTkFont(size=9), text_color="#3c3c3f").pack(side="left", pady=11)
         sep = ctk.CTkFrame(self, height=1, fg_color="#171719", corner_radius=0)
         sep.pack(fill="x")
