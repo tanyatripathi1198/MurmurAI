@@ -88,19 +88,19 @@ class NovaaAIWindow(ctk.CTk):
         # ring frame instead. Button sits inside showing 4px of ring as the border.
         self._mic_ring = ctk.CTkFrame(
             self, width=90, height=90,
-            fg_color="#2a2a32",    # idle border colour
-            corner_radius=45,      # perfect circle (90/2)
+            fg_color="#2a2a32",
+            corner_radius=999,     # clamps to exact half at any DPI → perfect circle
         )
         self._mic_ring.pack(pady=(20, 0))
         self._mic_ring.pack_propagate(False)
 
         self._mic_btn = ctk.CTkButton(
             self._mic_ring, text="🎙", width=82, height=82,
-            corner_radius=41,      # perfect circle (82/2)
+            corner_radius=999,     # clamps to exact half at any DPI → perfect circle
             font=("Segoe UI Emoji", 26),
             fg_color="#141419",
             hover_color="#1e1e28",
-            border_width=0,        # no CTkButton border — ring frame handles it
+            border_width=0,
             text_color=_ICON_COLOR,
             command=self._on_toggle,
         )
