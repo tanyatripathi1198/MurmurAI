@@ -127,7 +127,7 @@ class NovaaAIWindow(ctk.CTk):
 
         # Settings: ⚙ in Segoe UI Symbol — renders as clean monochrome gear (not emoji)
         ctk.CTkButton(
-            footer, text="⚙", width=24, height=24,
+            footer, text="⚙", width=28, height=28,
             fg_color="transparent", hover_color="#1a1a22",
             text_color="#555560", font=("Segoe UI Symbol", 12),
             command=self._show_settings,
